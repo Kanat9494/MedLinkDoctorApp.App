@@ -6,4 +6,8 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 	}
+
+    private void RegisterRoutingPages()
+    {
+    }
 }

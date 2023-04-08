@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MedLinkDoctorApp.Views.LoginPage"
+    Title="LoginPage"
+    xmlns:customControls="clr-namespace:MedLinkDoctorApp.Views.CustomControls"
+    BackgroundColor="{x:StaticResource White}"
+    Shell.NavBarIsVisible="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Path Stroke="#fff" Data="m0.30001,0l449,0l0,128.48327c-122.5,64.30167 -332.5,65.89076 -449,7.2429c0,-45.25313 0,-90.47304 0,-135.72617z"  
+              Fill="#2ECC71"/>
+
+        <VerticalStackLayout
+            VerticalOptions="CenterAndExpand"
+            Spacing="5"
+            Margin="20, 20, 20, 0"
+            Grid.Row="1">
+            <Label 
+                Text="Добро пожаловать!" 
+                HorizontalOptions="Center" 
+                FontSize="Title"
+                FontAttributes="Bold" 
+                Padding="0" 
+                Margin="0"
+                VerticalOptions="Center"/>
+
+            <Label 
+                Text="Войдите для продолжения" 
+                HorizontalOptions="Center" 
+                FontSize="Subtitle"
+                VerticalOptions="Center"/>
+
+            <Border
+                Stroke="LightGreen"
+                StrokeShape="RoundRectangle 10, 10, 10, 10"
+                Padding="0"
+                BackgroundColor="Transparent"
+                Margin="5"
+                >
+                <StackLayout 
+                    Orientation="Horizontal"
+                    >
+                    <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30"
+                            Padding="0" Margin="5 ">
+                        <Image Source="user_icon.png" Aspect="AspectFill"
+                            Margin="0"/>
+                    </Frame>
+                    <customControls:CustomEntry 
+                        Text="{Binding UserName}" 
+                        Placeholder="Введите логин" 
+                        TextColor="Black" 
+                        FontAttributes="Bold"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="FillAndExpand" 
+                        Margin="0,0,20,0"/>
+                </StackLayout>
+            </Border>
+
+            <Border
+                Stroke="LightGreen"
+                StrokeShape="RoundRectangle 10, 10, 10, 10"
+                Padding="0"
+                BackgroundColor="Transparent"
+                Margin="5">
+                <StackLayout 
+                    Orientation="Horizontal"
+                    >
+                    <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30"
+                            Padding="0" Margin="5 ">
+                        <Image 
+                            Source="password_icon.png" Aspect="AspectFill"
+                            Margin="0"/>
+                    </Frame>
+                    <customControls:CustomEntry 
+                        Text="{Binding Password}" 
+                        Placeholder="Введите пароль" 
+                        TextColor="Black" 
+                        FontAttributes="Bold"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="FillAndExpand" 
+                        Margin="0,0,20,0"/>
+                </StackLayout>
+            </Border>
+
+            <StackLayout Orientation="Horizontal" Margin="0,10,0,0" Padding="0">
+                <CheckBox IsChecked="False"/>
+                <Label Text="Запомнить" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" 
+                           HorizontalTextAlignment="Center"/>
+                <Label Text="Забыли пароль" TextColor="#1d8348" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+            </StackLayout>
+
+            <Button Text="Войти" BackgroundColor="{x:StaticResource Green45}" TextColor="White" FontAttributes="Bold" CornerRadius="10"
+                WidthRequest="200" Margin="0,15,0,0" 
+                Command="{Binding LoginCommand}"/>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
+                <Label Text="Новый пользователь?" TextColor="DarkGray" FontSize="Small"/>
+                <Label Text="  Зарегистрируйтесь" TextColor="#1d8348" FontAttributes="Bold" FontSize="Small"/>
+                <!--<Image
+                    Source="{Binding TestImg}"
+                    HeightRequest="70"
+                    WidthRequest="70"/>-->
+            </StackLayout>
+        </VerticalStackLayout>
+
+        <ActivityIndicator
+            IsRunning="{Binding IsLoading}"
+            IsVisible="{Binding IsLoading}"
+            HeightRequest="70"
+            Color="{x:StaticResource Red50}"
+            WidthRequest="70"
+            Grid.RowSpan="3"
+            />
+    </Grid>
+</ContentPage>
