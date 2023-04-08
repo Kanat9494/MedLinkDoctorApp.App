@@ -9,6 +9,10 @@ global using MedLinkDoctorApp.Constants;
 global using Newtonsoft.Json;
 global using System.Text;
 global using MedLinkDoctorApp.Views;
+global using MedLinkDoctorApp.Views.CustomControls;
+global using Microsoft.AspNetCore.SignalR.Client;
+
+
 
 
 

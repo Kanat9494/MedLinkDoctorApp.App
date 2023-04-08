@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MedLinkDoctorApp.Views.HomePage"
              Title="HomePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <StackLayout
+            VerticalOptions="FillAndExpand">
+            <Button
+                BackgroundColor="{x:StaticResource Yellow60}"
+                Text="Включить"
+                HorizontalOptions="Center"
+                VerticalOptions="CenterAndExpand"
+                TextColor="Black"
+                Command="{Binding OnlineCommand}"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

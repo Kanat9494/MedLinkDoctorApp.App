@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MedLinkDoctorApp.Views.OnlinePage"
+             Title="OnlinePage"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+    <StackLayout
+        VerticalOptions="CenterAndExpand"
+        HorizontalOptions="Fill">
+        <Frame
+            BackgroundColor="{x:StaticResource GreenPrimary}"
+            Margin="20, 0, 20, 0"
+            BorderColor="Transparent"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <StackLayout>
+                <Label
+                        HorizontalOptions="CenterAndExpand"
+                        Text="Ждем, пока врач не примет ваш вызов..."
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        LineBreakMode="CharacterWrap"/>
+
+                <ActivityIndicator
+                        Grid.RowSpan="1"
+                        IsVisible="{Binding IsOnline}"
+                        IsRunning="{Binding IsOnline}"
+                        Color="{x:StaticResource Red50}"
+                        HeightRequest="70"
+                        WidthRequest="70"/>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</ContentPage>

@@ -1,12 +1,10 @@
 namespace MedLinkDoctorApp.Views;
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class HomePage : ContentPage
+public partial class OnlinePage : ContentPage
 {
-	public HomePage()
+	public OnlinePage()
 	{
 		InitializeComponent();
-
-		BindingContext = new HomeViewModel();
 	}
 }
