@@ -11,6 +11,8 @@ global using System.Text;
 global using MedLinkDoctorApp.Views;
 global using MedLinkDoctorApp.Views.CustomControls;
 global using Microsoft.AspNetCore.SignalR.Client;
+global using MedLinkDoctorApp.Helpers;
+global using MedLinkDoctorApp.Services;
 
 
 

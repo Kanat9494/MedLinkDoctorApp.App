@@ -1,6 +1,4 @@
-﻿using MedLinkDoctorApp.Services;
-
-namespace MedLinkDoctorApp.ViewModels;
+﻿namespace MedLinkDoctorApp.ViewModels;
 
 internal class LoginViewModel : BaseViewModel
 {

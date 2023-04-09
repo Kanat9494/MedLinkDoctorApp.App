@@ -12,5 +12,6 @@ public partial class AppShell : Shell
     private void RegisterRoutingPages()
     {
         Routing.RegisterRoute(nameof(OnlinePage), typeof(OnlinePage));
+        Routing.RegisterRoute(nameof(ChatPage), typeof(ChatPage));
     }
 }

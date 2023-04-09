@@ -7,6 +7,7 @@ internal class OnlineViewModel : BaseViewModel
     public OnlineViewModel()
     {
         IsOnline = true;
+        _isCompleted = false;
 
         Task.Run(async () =>
         {
@@ -22,13 +23,13 @@ internal class OnlineViewModel : BaseViewModel
             await Connect();
         });
 
-        _hubConnection.Closed += async (error) =>
-        {
-            await Task.Delay(5000);
-            await Connect();
-        };
+        //_hubConnection.Closed += async (error) =>
+        //{
+        //    await Task.Delay(5000);
+        //    await Connect();
+        //};
 
-        _hubConnection.On<string, string, string>("ReceiveMessage", (senderName, receiverName, jsonMessage) =>
+        _hubConnection.On<string, string, string>("ReceiveMessage", async (senderName, receiverName, jsonMessage) =>
         {
             try
             {
@@ -39,8 +40,19 @@ internal class OnlineViewModel : BaseViewModel
                     Task.Run(async () =>
                     {
                         await SecureStorage.Default.SetAsync("ReceiverName", senderName);
-                        await ResponseConfirmMessage();
-                        await OnAcceptedConsultation();
+                        _receiverName = senderName;
+
+                        
+                    }).Wait();   
+
+                    Task.Run(async () =>
+                    {
+                        await CompleteConfirmMessage();
+                    }).Wait();
+
+                    App.Current.Dispatcher.Dispatch(async () =>
+                    {
+                        await Shell.Current.GoToAsync(nameof(ChatPage));
                     });
                 }
             }
@@ -59,6 +71,7 @@ internal class OnlineViewModel : BaseViewModel
     string _senderName;
     string _receiverName;
     HubConnection _hubConnection;
+    bool _isCompleted;
 
     async Task Connect()
     {
@@ -97,5 +110,11 @@ internal class OnlineViewModel : BaseViewModel
     private async Task OnAcceptedConsultation()
     {
         await Disconnect();
+    }
+
+    private async Task CompleteConfirmMessage()
+    {
+        await ResponseConfirmMessage();
+        await OnAcceptedConsultation();
     }
 }

@@ -1,12 +1,12 @@
 namespace MedLinkDoctorApp.Views;
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class OnlinePage : ContentPage
+public partial class ChatPage : ContentPage
 {
-	public OnlinePage()
+	public ChatPage()
 	{
 		InitializeComponent();
 
-		this.BindingContext = new OnlineViewModel();
+		BindingContext = new ChatViewModel();
 	}
 }
