@@ -9,7 +9,7 @@ internal class ChatTemplateSelector : DataTemplateSelector
     {
         if (item is Message message)
         {
-            if (message.ReceiverName == "test")
+            if (message.SenderName == AuthFields._senderName)
                 return OutgoingMessageTemplate; //OutgoingMessageTemplate
             else
                 return IncomingMessageTemplate;

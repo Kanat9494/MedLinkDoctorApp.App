@@ -56,6 +56,7 @@ internal class LoginViewModel : BaseViewModel
                 await SecureStorage.Default.SetAsync("DoctorAccessToken", CurrentDoctor.AccessToken);
                 await SecureStorage.Default.SetAsync("DoctorId", CurrentDoctor.DoctorId.ToString());
                 await SecureStorage.Default.SetAsync("AccountName", CurrentDoctor.AccountName);
+                AuthFields._senderName = CurrentDoctor.AccountName;
 
                 await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
             }
