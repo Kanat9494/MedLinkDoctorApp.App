@@ -29,13 +29,15 @@
                 FontAttributes="Bold" 
                 Padding="0" 
                 Margin="0"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                FontFamily="RegularFont"/>
 
             <Label 
                 Text="Войдите для продолжения" 
                 HorizontalOptions="Center" 
                 FontSize="Subtitle"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                FontFamily="RegularFont"/>
 
             <Border
                 Stroke="LightGreen"
@@ -92,9 +94,11 @@
             <StackLayout Orientation="Horizontal" Margin="0,10,0,0" Padding="0">
                 <CheckBox IsChecked="False"/>
                 <Label Text="Запомнить" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" 
-                           HorizontalTextAlignment="Center"/>
+                           HorizontalTextAlignment="Center"
+                    FontFamily="RegularFont"/>
                 <Label Text="Забыли пароль" TextColor="#1d8348" FontAttributes="Bold" HorizontalOptions="EndAndExpand"
-                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                    FontFamily="RegularFont"/>
             </StackLayout>
 
             <Button Text="Войти" BackgroundColor="{x:StaticResource Green45}" TextColor="White" FontAttributes="Bold" CornerRadius="10"
@@ -102,8 +106,10 @@
                 Command="{Binding LoginCommand}"/>
 
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
-                <Label Text="Новый пользователь?" TextColor="DarkGray" FontSize="Small"/>
-                <Label Text="  Зарегистрируйтесь" TextColor="#1d8348" FontAttributes="Bold" FontSize="Small"/>
+                <Label Text="Новый пользователь?" TextColor="DarkGray" FontSize="Small"
+                    FontFamily="RegularFont"/>
+                <Label Text="  Зарегистрируйтесь" TextColor="#1d8348" FontAttributes="Bold" FontSize="Small"
+                    FontFamily="RegularFont"/>
                 <!--<Image
                     Source="{Binding TestImg}"
                     HeightRequest="70"
