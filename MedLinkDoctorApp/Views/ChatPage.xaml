@@ -31,15 +31,15 @@
                             LineBreakMode="WordWrap"
                             VerticalOptions="FillAndExpand"
                             FontSize="16"
-                           />
+                            FontFamily="RegularFont"/>
                         <Image
                             Source="{Binding ImageUrl}"
                             >
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer
-                                            NumberOfTapsRequired="1"
-                                            Command="{Binding OpenPhotoMessageCommand}"
-                                            CommandParameter="{Binding ImageUrl}">
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding OpenPhotoMessageCommand}"
+                                    CommandParameter="{Binding ImageUrl}">
                                 </TapGestureRecognizer>
                             </Image.GestureRecognizers>
                         </Image>
@@ -65,11 +65,12 @@
                 >
                     <StackLayout
                         VerticalOptions="FillAndExpand">
-                        <Label Text="{Binding Content}" 
+                        <Label 
+                            Text="{Binding Content}" 
                             LineBreakMode="WordWrap"
-                               VerticalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
                             FontSize="16"
-                               />
+                            FontFamily="RegularFont"/>
                         <Image
                         Source="{Binding ImageUrl}"
                             WidthRequest="200"
@@ -163,7 +164,7 @@
                             HorizontalOptions="FillAndExpand" 
                             Margin="10,0,25,0"
                             FontSize="16"
-                            />
+                            FontFamily="RegularFont"/>
                     </Border>
 
                     <ImageButton

@@ -25,7 +25,8 @@
                     TextColor="{x:StaticResource Gray900}"
                     LineBreakMode="TailTruncation"
                     VerticalOptions="Center"
-                    FontSize="16"/>
+                    FontSize="16"
+                    FontFamily="RegularFont"/>
                 
                 <Label
                     Text="{Binding CurrentDoctor.FullName}"
@@ -34,7 +35,8 @@
                     LineBreakMode="TailTruncation"
                     FontSize="20"
                     FontAttributes="Bold"
-                    VerticalOptions="Center"/>
+                    VerticalOptions="Center"
+                    FontFamily="RegularFont"/>
 
                 <Border
                     Grid.Column="1"
@@ -66,7 +68,8 @@
                         <Label
                             Text="Баланс"
                             TextColor="{x:StaticResource White}"
-                            FontSize="19"/>
+                            FontSize="19"
+                            FontFamily="RegularFont"/>
                         <StackLayout
                             Orientation="Horizontal">
                             <Label
@@ -75,7 +78,8 @@
                                 TextColor="{x:StaticResource White}"
                                 Margin="0, 15, 0, 0"
                                 FontAttributes="Bold"
-                                Grid.Column="0"/>
+                                Grid.Column="0"
+                                FontFamily="RegularFont"/>
                                 
                             <Label
                                 Text="{Binding CurrentDoctor.DoctorBalance, StringFormat='{0:F2}'}"
@@ -89,6 +93,35 @@
                     </StackLayout>
                 </Border>
             </StackLayout>
+
+            <Border
+                StrokeShape="RoundRectangle 10"
+                Padding="25"
+                Margin="10, 20, 10, 0"
+                StrokeThickness="0">
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Label
+                        Text="Вывести"
+                        VerticalOptions="Center"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        FontFamily="RegularFont"/>
+
+                    <Border
+                        HorizontalOptions="EndAndExpand"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        StrokeThickness="0"
+                        BackgroundColor="{x:StaticResource White95}"
+                        Padding="10"
+                        StrokeShape="RoundRectangle 40">
+                        <Image
+                            Source="next_icon.png"
+                            />
+                    </Border>
+                </StackLayout>
+            </Border>
         </StackLayout>
     </ScrollView>
 </ContentPage>
