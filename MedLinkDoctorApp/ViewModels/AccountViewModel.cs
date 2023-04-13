@@ -6,6 +6,17 @@ internal class AccountViewModel : BaseViewModel
     {
         IsLoading = true;
 
+        RefreshAccountInfo = new Command(() =>
+        {
+            Task.Run(async () =>
+            {
+                await InitializeDoctor();
+            }).GetAwaiter().OnCompleted(() =>
+            {
+                IsRefreshing = false;
+            });
+        });
+
         Task.Run(async () =>
         {
             _accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
@@ -15,6 +26,13 @@ internal class AccountViewModel : BaseViewModel
         });
     }
 
+    public Command RefreshAccountInfo { get; }
+    private bool _isRefreshing;
+    public bool IsRefreshing
+    {
+        get => _isRefreshing;
+        set => SetProperty(ref _isRefreshing, value);
+    }
     private DoctorAuthResponse _currentDoctor;
     public DoctorAuthResponse CurrentDoctor
     {
