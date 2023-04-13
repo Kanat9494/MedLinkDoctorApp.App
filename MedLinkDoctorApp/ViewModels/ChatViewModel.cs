@@ -56,19 +56,11 @@ internal class ChatViewModel : BaseViewModel
             try
             {
                 var message = JsonConvert.DeserializeObject<Message>(jsonMessage);
-                //_receiverName = senderName;
-                if (_isConfirmed)
-                {
-                    if (!_isTimerRunning)
-                    {
-                        StartCountDownTimer();
-                        _isTimerRunning = !_isTimerRunning;
-                    }
+                _receiverName = senderName;
 
-                    SendLocalMessage(message);
-                }
-                else
-                    Task.Run(async () => await ConsultationConfirmed());
+                //StartCountDownTimer();
+
+                SendLocalMessage(message);
             }
             catch
             {
@@ -117,30 +109,30 @@ internal class ChatViewModel : BaseViewModel
     private bool _isTimerRunning;
     public ObservableCollection<Message> Messages { get; set; }
 
-    void StartCountDownTimer()
-    {
-        timer = new System.Timers.Timer();
-        endTime = DateTime.Now.AddMinutes(5);
-        timer.Elapsed += ChatTimerTick;
-        TimeSpan timeSpan = endTime - DateTime.Now;
-        cTimer = timeSpan.ToString("m' Minutes 's' Seconds'");
-        timer.Start();
-    }
+    //void StartCountDownTimer()
+    //{
+    //    timer = new System.Timers.Timer();
+    //    endTime = DateTime.Now.AddMinutes(5);
+    //    timer.Elapsed += ChatTimerTick;
+    //    TimeSpan timeSpan = endTime - DateTime.Now;
+    //    cTimer = timeSpan.ToString("m' Minutes 's' Seconds'");
+    //    timer.Start();
+    //}
 
-    void ChatTimerTick(object sender, EventArgs e)
-    {
-        TimeSpan timeSpan = endTime - DateTime.Now;
+    //void ChatTimerTick(object sender, EventArgs e)
+    //{
+    //    TimeSpan timeSpan = endTime - DateTime.Now;
 
-        cTimer = timeSpan.ToString("m':'s' '");
+    //    cTimer = timeSpan.ToString("m':'s' '");
 
-        App.Current.Dispatcher.Dispatch(() =>
-        {
-            ChatTimer = cTimer;
-        });
+    //    App.Current.Dispatcher.Dispatch(() =>
+    //    {
+    //        ChatTimer = cTimer;
+    //    });
 
-        if ((timeSpan.TotalMinutes == 0) || (timeSpan.TotalMilliseconds < 1000))
-            timer.Stop();
-    }
+    //    if ((timeSpan.TotalMinutes == 0) || (timeSpan.TotalMilliseconds < 1000))
+    //        timer.Stop();
+    //}
 
     async Task OnSendMessage()
     {
@@ -208,8 +200,6 @@ internal class ChatViewModel : BaseViewModel
         _isConfirmed = true;
 
         await Task.Delay(500);
-
-        StartCountDownTimer();
     }
 
     private void SendLocalMessage(Message message)

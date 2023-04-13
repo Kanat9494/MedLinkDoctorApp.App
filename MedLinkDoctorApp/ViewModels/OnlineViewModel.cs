@@ -23,6 +23,8 @@ internal class OnlineViewModel : BaseViewModel
             await Connect();
         });
 
+        BackCommand = new Command(OnBackCommand);
+
         //_hubConnection.Closed += async (error) =>
         //{
         //    await Task.Delay(5000);
@@ -73,6 +75,8 @@ internal class OnlineViewModel : BaseViewModel
     HubConnection _hubConnection;
     bool _isCompleted;
 
+    public Command BackCommand { get; }
+
     async Task Connect()
     {
         try
@@ -116,5 +120,10 @@ internal class OnlineViewModel : BaseViewModel
     {
         await ResponseConfirmMessage();
         await OnAcceptedConsultation();
+    }
+
+    async void OnBackCommand()
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }

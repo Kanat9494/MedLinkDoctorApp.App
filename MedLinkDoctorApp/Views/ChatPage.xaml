@@ -104,23 +104,10 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Frame
-                Grid.Column="0"
-                Margin="10"
-                BackgroundColor="{x:StaticResource Yellow60}"
-                BorderColor="Transparent"
-                Padding="0">
-                    <Label
-                    Text="{Binding ChatTimer}"
-                    FontAttributes="Bold"
-                    FontSize="45"
-                    HorizontalOptions="Center"
-                    />
-                </Frame>
 
                 <Button 
-                    Text="Прервать"
-                    Grid.Column="1"
+                    Text="Завершить"
+                    Grid.ColumnSpan="2"
                     Margin="10"
                     Command="{Binding AbortChatCommand}"/>
             </Grid>
