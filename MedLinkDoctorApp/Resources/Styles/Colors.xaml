@@ -55,5 +55,7 @@
     <Color x:Key="GreenPrimary">#b3ffb3</Color>
     <Color x:Key="Yellow65">#ffff4d</Color>
     <Color x:Key="Green50">#33cc33</Color>
+    <Color x:Key="Pink85">#ffb3ff</Color>
+    <Color x:Key="Red70">#ff6666</Color>
 
 </ResourceDictionary>

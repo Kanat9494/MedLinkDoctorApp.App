@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MedLinkDoctorApp.Views.AccountPage"
+    Title="{Binding CurrentDoctor.AccountName}"
+    >
+    <ScrollView
+        BackgroundColor="{x:StaticResource White95}">
+        <StackLayout>
+            <Grid
+                Margin="10, 30, 10, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Text="Добро пожаловать"
+                    Grid.Row="0"
+                    TextColor="{x:StaticResource Gray900}"
+                    LineBreakMode="TailTruncation"
+                    VerticalOptions="Center"
+                    FontSize="16"/>
+                
+                <Label
+                    Text="{Binding CurrentDoctor.FullName}"
+                    Grid.Row="1"
+                    TextColor="{x:StaticResource Black}"
+                    LineBreakMode="TailTruncation"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    VerticalOptions="Center"/>
+
+                <Border
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    StrokeShape="RoundRectangle 10">
+                    <Image
+                        Source="{Binding CurrentDoctor.ProfileImg}"
+                        Aspect="Fill"/>
+                </Border>
+            </Grid>
+
+
+            <ActivityIndicator
+                Color="{x:StaticResource Green45}"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                HeightRequest="70"
+                WidthRequest="70"/>
+
+            <StackLayout
+                Margin="10, 10, 10, 0">
+                <Border
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="0"
+                    Padding="15"
+                    BackgroundColor="{x:StaticResource Red70}"
+                    >
+                    <StackLayout>
+                        <Label
+                            Text="Баланс"
+                            TextColor="{x:StaticResource White}"
+                            FontSize="19"/>
+                        <StackLayout
+                            Orientation="Horizontal">
+                            <Label
+                                Text="KG"
+                                FontSize="28"
+                                TextColor="{x:StaticResource White}"
+                                Margin="0, 15, 0, 0"
+                                FontAttributes="Bold"
+                                Grid.Column="0"/>
+                                
+                            <Label
+                                Text="{Binding CurrentDoctor.DoctorBalance, StringFormat='{0:F2}'}"
+                                FontSize="28"
+                                TextColor="{x:StaticResource White}"
+                                Margin="30, 15, 0, 0"
+                                FontAttributes="Bold"
+                                Grid.Column="1"
+                                />
+                        </StackLayout>
+                    </StackLayout>
+                </Border>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
