@@ -9,4 +9,9 @@ public partial class ChatPage : ContentPage
 
 		BindingContext = new ChatViewModel();
 	}
+
+	protected override bool OnBackButtonPressed()
+	{
+		return true;
+	}
 }
