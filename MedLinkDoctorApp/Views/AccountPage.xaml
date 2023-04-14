@@ -44,7 +44,8 @@
                     <Border
                     Grid.Column="1"
                     Grid.RowSpan="2"
-                    StrokeShape="RoundRectangle 10">
+                    StrokeShape="RoundRectangle 10"
+                        StrokeThickness="0">
                         <Image
                         Source="{Binding CurrentDoctor.ProfileImg}"
                         Aspect="Fill"/>

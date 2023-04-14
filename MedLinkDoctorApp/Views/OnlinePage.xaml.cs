@@ -10,8 +10,8 @@ public partial class OnlinePage : ContentPage
 		this.BindingContext = new OnlineViewModel();
 	}
 
-    protected override bool OnBackButtonPressed()
-    {
-        return true;
-    }
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    return true;
+    //}
 }

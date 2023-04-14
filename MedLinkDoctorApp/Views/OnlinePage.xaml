@@ -4,10 +4,6 @@
              x:Class="MedLinkDoctorApp.Views.OnlinePage"
              Title="OnlinePage"
     Shell.TabBarIsVisible="False">
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior 
-            Command="{Binding BackCommand}"/>
-    </Shell.BackButtonBehavior>
     <StackLayout
         VerticalOptions="CenterAndExpand"
         HorizontalOptions="Fill">

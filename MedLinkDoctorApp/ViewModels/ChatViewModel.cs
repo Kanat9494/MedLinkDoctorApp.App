@@ -236,7 +236,7 @@ internal class ChatViewModel : BaseViewModel
     private async void OnAbortChat()
     {
         await Disconnect();
-        await Shell.Current.GoToAsync(nameof(OnlinePage));
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
 
     private async Task OnOpenPhotoMessage(string imageUrl)

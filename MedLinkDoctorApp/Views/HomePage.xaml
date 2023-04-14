@@ -5,14 +5,26 @@
              Title="HomePage">
     <ScrollView>
         <StackLayout
-            VerticalOptions="FillAndExpand">
-            <Button
-                BackgroundColor="{x:StaticResource Yellow60}"
-                Text="Включить"
-                HorizontalOptions="Center"
-                VerticalOptions="CenterAndExpand"
-                TextColor="Black"
-                Command="{Binding OnlineCommand}"/>
+            >
+            <StackLayout
+                HeightRequest="130"
+                VerticalOptions="CenterAndExpand">
+                <Button
+                    BackgroundColor="{x:StaticResource Yellow60}"
+                    Text="Включить"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand"
+                    TextColor="Black"
+                    Command="{Binding OnlineCommand}"
+                    />
+
+                <Button
+                    Text="Выключить"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand"
+                    Command="{Binding OffLineCommand}"
+                    />
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

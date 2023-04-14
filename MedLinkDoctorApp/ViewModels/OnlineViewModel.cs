@@ -25,11 +25,11 @@ internal class OnlineViewModel : BaseViewModel
 
         BackCommand = new Command(OnBackCommand);
 
-        //_hubConnection.Closed += async (error) =>
-        //{
-        //    await Task.Delay(5000);
-        //    await Connect();
-        //};
+        _hubConnection.Closed += async (error) =>
+        {
+            await Task.Delay(5000);
+            await Connect();
+        };
 
         _hubConnection.On<string, string, string>("ReceiveMessage", async (senderName, receiverName, jsonMessage) =>
         {

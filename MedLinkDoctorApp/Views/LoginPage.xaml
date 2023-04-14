@@ -105,7 +105,16 @@
                 WidthRequest="200" Margin="0,15,0,0" 
                 Command="{Binding LoginCommand}"/>
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
+            <Label
+                Text="Версия 1.0"
+                Margin="0, 20, 0, 0"
+                HorizontalOptions="Center"
+                FontFamily="RegularFont"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="{x:StaticResource White60}"/>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,30,0,0" Padding="0">
                 <Label Text="Новый пользователь?" TextColor="DarkGray" FontSize="Small"
                     FontFamily="RegularFont"/>
                 <Label Text="  Зарегистрируйтесь" TextColor="#1d8348" FontAttributes="Bold" FontSize="Small"
