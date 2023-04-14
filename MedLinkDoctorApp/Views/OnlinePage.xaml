@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MedLinkDoctorApp.Views.OnlinePage"
              Title="OnlinePage"
-    Shell.TabBarIsVisible="False">
+    Shell.TabBarIsVisible="False"
+    Shell.NavBarIsVisible="False">
     <StackLayout
         VerticalOptions="CenterAndExpand"
         HorizontalOptions="Fill">
@@ -21,6 +22,13 @@
                     FontAttributes="Bold"
                     LineBreakMode="CharacterWrap"
                     FontFamily="RegularFont"/>
+
+                <Button
+                    Text="Отменить"
+                    FontFamily="RegularFont"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="{x:StaticResource Yellow60}"
+                    Margin="0, 25, 0, 0"/>
             </StackLayout>
         </Frame>
     </StackLayout>
