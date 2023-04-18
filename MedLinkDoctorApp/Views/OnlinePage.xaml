@@ -28,7 +28,41 @@
                     FontFamily="RegularFont"
                     Command="{Binding CancelCommand}"
                     BackgroundColor="{x:StaticResource Yellow60}"
-                    Margin="0, 25, 0, 0"/>
+                    Margin="0, 25, 0, 0"
+                    TextColor="Black"/>
+            </StackLayout>
+        </Frame>
+
+        <Frame
+            BackgroundColor="{x:StaticResource PinkPrimary}"
+            Margin="20, 15, 20, 0"
+            BorderColor="Transparent"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            IsVisible="{Binding IsConfirmMessage}">
+            <StackLayout
+                >
+                <Label
+                    Text="{Binding ConfirmMessage}"
+                    FontFamily="RegularFont"
+                    FontSize="16"
+                    HorizontalOptions="CenterAndExpand"/>
+                
+                <StackLayout
+                    Orientation="Horizontal"
+                    Margin="0, 15, 0, 0">
+                    <Button
+                    Text="Принять"
+                    Command="{Binding AcceptCommand}"
+                    BackgroundColor="{x:StaticResource Green50}"
+                        HorizontalOptions="CenterAndExpand"/>
+
+                    <Button
+                    Text="Отклонить"
+                    Command="{Binding RejectCommand}"
+                    BackgroundColor="{x:StaticResource Red50}"
+                        HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
             </StackLayout>
         </Frame>
     </StackLayout>
