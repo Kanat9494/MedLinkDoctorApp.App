@@ -98,6 +98,7 @@
         VerticalOptions="FillAndExpand"
         >
         <StackLayout
+            IsVisible="{Binding ContentIsVisible}"
             VerticalOptions="FillAndExpand">
             <Grid
             >
@@ -105,10 +106,23 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
+                <Frame
+                Grid.Column="0"
+                Margin="10"
+                BackgroundColor="{x:StaticResource Yellow60}"
+                BorderColor="Transparent"
+                Padding="0">
+                    <Label
+                    Text="{Binding ChatTimer}"
+                    FontAttributes="Bold"
+                    FontSize="45"
+                    HorizontalOptions="Center"
+                    FontFamily="RegularFont"/>
+                </Frame>
 
                 <Button 
                     Text="Завершить"
-                    Grid.ColumnSpan="2"
+                    Grid.Column="1"
                     Margin="10"
                     Command="{Binding AbortChatCommand}"/>
             </Grid>
@@ -124,10 +138,11 @@
                     </Grid.RowDefinitions>
 
                     <CollectionView
-                    ItemsSource="{Binding Messages}"
-                    ItemTemplate="{StaticResource ChatTemplateSelector}"
+                        ItemsSource="{Binding Messages}"
+                        ItemTemplate="{StaticResource ChatTemplateSelector}"
                         Grid.Row="0"
-                        VerticalOptions="FillAndExpand">
+                        VerticalOptions="FillAndExpand"
+                        ItemsUpdatingScrollMode="KeepLastItemInView">
 
                     </CollectionView>
 
@@ -136,8 +151,8 @@
             </StackLayout>
 
             <StackLayout 
-                    Margin="0"
-                    HeightRequest="100"
+                Margin="0"
+                HeightRequest="100"
                 BackgroundColor="{x:StaticResource GreenPrimary}"
                 Padding="0">
                 <Grid
@@ -209,31 +224,67 @@
 
         </StackLayout>
 
-        <!--<StackLayout
+        <StackLayout
             IsVisible="{Binding WaitingForDoctor}"
             HorizontalOptions="Center"
             VerticalOptions="CenterAndExpand">
             <Frame
-                BackgroundColor="{x:StaticResource GreenPrimary}"
-                Margin="20, 0, 20, 0"
-                BorderColor="Transparent">
+            BackgroundColor="{x:StaticResource GreenPrimary}"
+            Margin="20, 0, 20, 0"
+            BorderColor="Transparent"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
                 <StackLayout>
                     <Label
-                        HorizontalOptions="CenterAndExpand"
-                        Text="Ждем, пока врач не примет ваш вызов..."
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        LineBreakMode="CharacterWrap"/>
+                    HorizontalOptions="CenterAndExpand"
+                    Text="Ваш статус онлайн, вы сможете оказывать консультации"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    LineBreakMode="CharacterWrap"
+                    FontFamily="RegularFont"/>
 
-                    <ActivityIndicator
-                        Grid.RowSpan="1"
-                        IsVisible="{Binding WaitingForDoctor}"
-                        IsRunning="{Binding WaitingForDoctor}"
-                        Color="{x:StaticResource Red50}"
-                        HeightRequest="70"
-                        WidthRequest="70"/>
+                    <Button
+                    Text="Отменить"
+                    FontFamily="RegularFont"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="{x:StaticResource Yellow60}"
+                    Margin="0, 25, 0, 0"
+                    TextColor="Black"/>
                 </StackLayout>
             </Frame>
-        </StackLayout>-->
+
+            <Frame
+            BackgroundColor="{x:StaticResource PinkPrimary}"
+            Margin="20, 15, 20, 0"
+            BorderColor="Transparent"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            IsVisible="{Binding IsConfirmMessage}">
+                <StackLayout
+                >
+                    <Label
+                    Text="{Binding ConfirmMessage}"
+                    FontFamily="RegularFont"
+                    FontSize="16"
+                    HorizontalOptions="CenterAndExpand"/>
+
+                    <StackLayout
+                    Orientation="Horizontal"
+                    Margin="0, 15, 0, 0">
+                        <Button
+                    Text="Принять"
+                    Command="{Binding AcceptCommand}"
+                    BackgroundColor="{x:StaticResource Green50}"
+                        HorizontalOptions="CenterAndExpand"/>
+
+                        <Button
+                    Text="Отклонить"
+                    Command="{Binding RejectCommand}"
+                    BackgroundColor="{x:StaticResource Red50}"
+                        HorizontalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

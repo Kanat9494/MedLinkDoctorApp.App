@@ -73,7 +73,7 @@ internal class ContentService
 
             try
             {
-                var response = await httpClient.GetStringAsync(httpClient.BaseAddress + requestUrl);
+                await httpClient.GetStringAsync(httpClient.BaseAddress + requestUrl);
             }
             catch (Exception ex)
             {

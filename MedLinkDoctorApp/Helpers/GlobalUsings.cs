@@ -13,6 +13,10 @@ global using MedLinkDoctorApp.Views.CustomControls;
 global using Microsoft.AspNetCore.SignalR.Client;
 global using MedLinkDoctorApp.Helpers;
 global using MedLinkDoctorApp.Services;
+global using Firebase.Database;
+global using System.Collections.ObjectModel;
+global using Firebase.Database.Query;
+global using System.Reactive.Linq;
 
 
 
