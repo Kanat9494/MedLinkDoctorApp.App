@@ -6,5 +6,4 @@ internal class Offer : BaseResponse
     public string SenderName { get; set; }
     public string ReceiverName { get; set; }
     public double ProductPrice { get; set; }
-    public byte? Status { get; set; }
 }

@@ -6,7 +6,6 @@ internal class OnlineViewModel : BaseViewModel
     {
         IsOnline = true;
         IsConfirmMessage = false;
-        _isCompleted = false;
         cancelTokenSource = new CancellationTokenSource();
         cancelToken = cancelTokenSource.Token;
 
@@ -21,55 +20,10 @@ internal class OnlineViewModel : BaseViewModel
         CancelCommand = new Command(OnCancel);
         RejectCommand = new Command(OnReject);
         AcceptCommand = new Command(OnAccept);
-
-        //_hubConnection.On<string, string, double>("ReceiveConfirmMessage", (senderName, receiverName, price) =>
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        await SecureStorage.Default.SetAsync("ReceiverName", senderName);
-        //        _receiverName = senderName;
-        //    }).Wait();
-
-        //    _productPrice = price;
-        //    ConfirmMessage = $"К вам поступил запрос на консультацию, стоимостью {price} сом.";
-        //    IsConfirmMessage = true;
-        //});
-
-        //_hubConnection.On<string, string, string>("ReceiveMessage", async (senderName, receiverName, jsonMessage) =>
-        //{
-        //    try
-        //    {
-        //        var message = JsonConvert.DeserializeObject<Message>(jsonMessage);
-
-                
-        //        Task.Run(async () =>
-        //        {
-        //            await SecureStorage.Default.SetAsync("ReceiverName", senderName);
-        //            _receiverName = senderName;
-
-                        
-        //        }).Wait();   
-
-        //        Task.Run(async () =>
-        //        {
-        //            await CompleteConfirmMessage();
-        //        }).Wait();
-
-        //        App.Current.Dispatcher.Dispatch(async () =>
-        //        {
-        //            await Shell.Current.GoToAsync(nameof(ChatPage));
-        //        });
-        //    }
-        //    catch
-        //    {
-
-        //    }
-        //});
     }
 
     string _senderName;
     string _receiverName;
-    bool _isCompleted;
     double _productPrice;
     string _accessToken;
     int _offerId;
@@ -111,14 +65,16 @@ internal class OnlineViewModel : BaseViewModel
                 if (cancelToken.IsCancellationRequested)
                     break;
 
-                var offer = await ContentService.Instance(_accessToken).GetItemAsync<Offer>($"api/Offer/GetOffer?receiverName={_senderName}");
+                var offer = await ContentService.Instance(_accessToken).GetItemAsync<Offer>($"api/Offers/GetOffer?receiverName={_senderName}");
 
                 if (offer != null)
                 {
                     if (offer.StatusCode == 200)
                     {
-                        _receiverName = offer.ReceiverName;
-                        ConfirmMessage = $"К вам поступил запрос на консультацию, стоимостью {offer.ProductPrice} сом.";
+                        _receiverName = offer.SenderName;
+                        await SecureStorage.Default.SetAsync("ReceiverName", offer.SenderName);
+                        _productPrice = offer.ProductPrice;
+                        ConfirmMessage = $"К вам поступил запрос на консультацию, стоимостью {_productPrice} сом.";
                         _offerId = offer.OfferId;
                         IsConfirmMessage = true;
 
@@ -137,7 +93,7 @@ internal class OnlineViewModel : BaseViewModel
     async void OnCancel()
     {
         cancelTokenSource.Cancel();
-        await Task.Delay(1000);
+        //await Task.Delay(1000);
         cancelTokenSource.Dispose();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
@@ -148,6 +104,14 @@ internal class OnlineViewModel : BaseViewModel
         {
             await Shell.Current.DisplayAlert("Отмена", "Вы отменили запрос", "Ок");
             IsConfirmMessage = false;
+            await Task.Delay(1500);
+            while (true)
+            {
+                var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&status=0");
+                var isDeleted = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/DeleteOffer?offerId={_offerId}");
+                if (isSaved && isDeleted)
+                    break;
+            }
             GetOffer();
         }
         catch (Exception ex)
@@ -159,8 +123,19 @@ internal class OnlineViewModel : BaseViewModel
     {
         try
         {
-            await ContentService.Instance(_accessToken).UpdateItemAsync($"api/Offer/SetOffer?senderName={_senderName}&receiverName={_receiverName}");
-            await ContentService.Instance(_accessToken).UpdateItemAsync($"api/Offer/DeleteOffer?offerId={_offerId}");
+            await Task.Run(async () =>
+            {
+                while (true)
+                {
+                    var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&status=1");
+                    var isDeleted = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/DeleteOffer?offerId={_offerId}");
+
+                    if (isSaved && isDeleted)
+                        break;
+
+                    await Task.Delay(3000);
+                }
+            });
             
 
             await Shell.Current.GoToAsync(nameof(ChatPage));

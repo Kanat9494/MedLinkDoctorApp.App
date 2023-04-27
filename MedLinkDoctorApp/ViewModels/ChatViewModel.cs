@@ -6,10 +6,6 @@ internal class ChatViewModel : BaseViewModel
 {
     public ChatViewModel()
     {
-        WaitingForDoctor = true;
-        ContentIsVisible = false;
-        _isConfirmed = false;
-
         Task.Run(async () =>
         {
             accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
@@ -20,21 +16,8 @@ internal class ChatViewModel : BaseViewModel
 
         Messages = new ObservableCollection<Message>();
 
-        //ConnectToFirebase();
-        firebaseClient = new FirebaseClient("https://medlinkchat-default-rtdb.europe-west1.firebasedatabase.app/");
-        var collectionOfMessages = firebaseClient
-            .Child("Messages")
-            .OrderByPriority()
-            .LimitToLast(1)
-            .AsObservable<Message>()
-            .Where(m => m.Object.ReceiverName == _senderName && m.Object.SenderName == _receiverName)
-            .Subscribe((item) =>
-            {
-                if (item.Object != null)
-                {
-                    Messages.Add(item.Object);
-                }
-            });
+        ConnectToFirebase();
+        
 
         SendMessage = new Command(async () =>
         {
@@ -45,25 +28,18 @@ internal class ChatViewModel : BaseViewModel
         OpenPhotoMessagePage = new Command(PickImage);
         OpenPhotoMessageCommand = new Command<string>(async (imageUrl) => await OnOpenPhotoMessage(imageUrl));
         AbortChatCommand = new Command(OnAbortChat);
-        CancelCommand = new Command(OnCancel);
-        RejectCommand = new Command(OnReject);
-        AcceptCommand = new Command(OnAccept);
     }
 
     string accessToken;
     private string _senderName;
     private string _receiverName;
     FirebaseClient firebaseClient;
-    bool _isConfirmed;
 
     public Command SendMessage { get; }
     public Command OpenAudioMessagePage { get; }
     public Command OpenPhotoMessagePage { get; }
     public Command<string> OpenPhotoMessageCommand { get; }
     public Command AbortChatCommand { get; }
-    public Command CancelCommand { get; }
-    public Command AcceptCommand { get; }
-    public Command RejectCommand { get; }
 
 
     private string _sendingMessage;
@@ -77,18 +53,6 @@ internal class ChatViewModel : BaseViewModel
     {
         get => _doctorFullName;
         set => SetProperty(ref _doctorFullName, value);
-    }
-    private bool _contentIsVisible;
-    public bool ContentIsVisible
-    {
-        get => _contentIsVisible;
-        set => SetProperty(ref _contentIsVisible, value);
-    }
-    private bool _waitingForDoctor;
-    public bool WaitingForDoctor
-    {
-        get => _waitingForDoctor;
-        set => SetProperty(ref _waitingForDoctor, value);
     }
     private bool _isConfirmMessage;
     public bool IsConfirmMessage
@@ -150,21 +114,7 @@ internal class ChatViewModel : BaseViewModel
             .Subscribe((item) =>
             {
                 if (item.Object != null)
-                {
-                    if (!_isConfirmed)
-                    {
-                        if (item.Object.Content == MedLinkConstants.CONFIRM_MESSAGE)
-                        {
-                            _receiverName = item.Object.SenderName;
-                            Task.Run(async () =>
-                            {
-                                await ConsultationConfirmed();
-                            });
-                        }
-                    }
-                    else
-                        Messages.Add(item.Object);
-                }
+                    Messages.Add(item.Object);
             });
         }
         catch (Exception ex)
@@ -177,34 +127,6 @@ internal class ChatViewModel : BaseViewModel
     {
         if (firebaseClient != null)
             firebaseClient.Dispose();
-    }
-
-    async Task SendConfirmMessage()
-    {
-        try
-        {
-            var message = new Message
-            {
-                SenderName = _senderName,
-                ReceiverName = _receiverName,
-                Content = MedLinkConstants.CONFIRM_MESSAGE
-            };
-
-            var serializedMessage = JsonConvert.SerializeObject(message);
-            await firebaseClient.Child("Messages").PostAsync(serializedMessage);
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-
-    private async Task ConsultationConfirmed()
-    {
-        WaitingForDoctor = false;
-        await Task.Delay(500);
-        ContentIsVisible = true;
-        _isConfirmed = true;
     }
 
     private void SendLocalMessage(Message message)
@@ -250,70 +172,6 @@ internal class ChatViewModel : BaseViewModel
         //await Shell.Current.GoToAsync($"{nameof(ImageBrowsePage)}?{nameof(ImageBrowseViewModel.ImageUrl)}={imageUrl}");
     }
 
-    #region accept and reject offer
-    async Task ConfirmOffer()
-    {
-        try
-        {
-            var message = new Message
-            {
-                SenderName = _senderName,
-                ReceiverName = _receiverName,
-                Content = MedLinkConstants.CONFIRM_MESSAGE
-            };
-
-            var serializedMessage = JsonConvert.SerializeObject(message);
-            await firebaseClient.Child("Messages").PostAsync(serializedMessage);
-        }
-        catch
-        {
-
-        }
-    }
-
-    async void OnCancel()
-    {
-        DisconnectFirebase();
-        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
-    }
-
-    async void OnReject()
-    {
-        try
-        {
-            var message = new Message
-            {
-                SenderName = _senderName,
-                ReceiverName = _receiverName,
-                Content = MedLinkConstants.REJECT_MESSAGE
-            };
-            var serializedMessage = JsonConvert.SerializeObject(message);
-            await firebaseClient.Child("Messages").PostAsync(serializedMessage);
-
-            IsConfirmMessage = false;
-            await Shell.Current.DisplayAlert("Отмена", "Вы отменили запрос", "Ок");
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-    async void OnAccept()
-    {
-        try
-        {
-            await ConfirmOffer();
-            WaitingForDoctor = false;
-            await Task.Delay(500);
-            ContentIsVisible = true;
-            _isConfirmed = true;
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-    #endregion
 
     #region SendImage
 
