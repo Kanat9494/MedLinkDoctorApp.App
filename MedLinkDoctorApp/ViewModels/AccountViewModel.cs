@@ -17,6 +17,8 @@ internal class AccountViewModel : BaseViewModel
             });
         });
 
+        ExitCommand = new Command(OnExit);
+
         Task.Run(async () =>
         {
             _accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
@@ -27,6 +29,7 @@ internal class AccountViewModel : BaseViewModel
     }
 
     public Command RefreshAccountInfo { get; }
+    public Command ExitCommand { get; }
     private bool _isRefreshing;
     public bool IsRefreshing
     {
@@ -66,5 +69,10 @@ internal class AccountViewModel : BaseViewModel
         {
             IsLoading = false;
         }
+    }
+
+    void OnExit()
+    {
+        System.Diagnostics.Process.GetCurrentProcess().Kill();
     }
 }

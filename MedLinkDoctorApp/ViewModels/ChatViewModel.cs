@@ -17,7 +17,6 @@ internal class ChatViewModel : BaseViewModel
         Messages = new ObservableCollection<Message>();
 
         ConnectToFirebase();
-        
 
         SendMessage = new Command(async () =>
         {
@@ -54,24 +53,7 @@ internal class ChatViewModel : BaseViewModel
         get => _doctorFullName;
         set => SetProperty(ref _doctorFullName, value);
     }
-    private bool _isConfirmMessage;
-    public bool IsConfirmMessage
-    {
-        get => _isConfirmMessage;
-        set => SetProperty(ref _isConfirmMessage, value);
-    }
-    private string _confirmMessage;
-    public string ConfirmMessage
-    {
-        get => _confirmMessage;
-        set => SetProperty(ref _confirmMessage, value);
-    }
-    private bool _isOnline;
-    public bool IsOnline
-    {
-        get => _isOnline;
-        set => SetProperty(ref _isOnline, value);
-    }
+    
 
     public ObservableCollection<Message> Messages { get; set; }
 
@@ -162,7 +144,9 @@ internal class ChatViewModel : BaseViewModel
 
     private async void OnAbortChat()
     {
-        await Shell.Current.DisplayAlert("Отмена", "Предложение отменено!", "Ок");
+        await Shell.Current.DisplayAlert("Отмена", "Консультация отменена!", "Ок");
+        SendingMessage = "Врач завершил консультацию, теперь вы также можете покинуть чат!";
+        await OnSendMessage();
         DisconnectFirebase();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }

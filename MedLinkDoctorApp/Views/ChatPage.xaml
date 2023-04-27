@@ -101,29 +101,12 @@
             VerticalOptions="FillAndExpand">
             <Grid
             >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"/>
-                    <ColumnDefinition Width="50*"/>
-                </Grid.ColumnDefinitions>
-                <Frame
-                Grid.Column="0"
-                Margin="10"
-                BackgroundColor="{x:StaticResource Yellow60}"
-                BorderColor="Transparent"
-                Padding="0">
-                    <Label
-                    Text="{Binding ChatTimer}"
-                    FontAttributes="Bold"
-                    FontSize="45"
-                    HorizontalOptions="Center"
-                    FontFamily="RegularFont"/>
-                </Frame>
-
                 <Button 
                     Text="Завершить"
                     Grid.Column="1"
                     Margin="10"
-                    Command="{Binding AbortChatCommand}"/>
+                    Command="{Binding AbortChatCommand}"
+                    />
             </Grid>
 
 
