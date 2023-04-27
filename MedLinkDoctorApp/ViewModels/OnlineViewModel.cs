@@ -115,7 +115,7 @@ internal class OnlineViewModel : BaseViewModel
 
                 if (offer != null)
                 {
-                    if (offer.ReceiverName != null)
+                    if (offer.StatusCode == 200)
                     {
                         _receiverName = offer.ReceiverName;
                         ConfirmMessage = $"К вам поступил запрос на консультацию, стоимостью {offer.ProductPrice} сом.";
@@ -148,6 +148,7 @@ internal class OnlineViewModel : BaseViewModel
         {
             await Shell.Current.DisplayAlert("Отмена", "Вы отменили запрос", "Ок");
             IsConfirmMessage = false;
+            GetOffer();
         }
         catch (Exception ex)
         {
