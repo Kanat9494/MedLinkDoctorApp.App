@@ -107,7 +107,7 @@ internal class OnlineViewModel : BaseViewModel
             await Task.Delay(1500);
             while (true)
             {
-                var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&status=0");
+                var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&isConfirmed=1");
                 var isDeleted = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/DeleteOffer?offerId={_offerId}");
                 if (isSaved && isDeleted)
                     break;
