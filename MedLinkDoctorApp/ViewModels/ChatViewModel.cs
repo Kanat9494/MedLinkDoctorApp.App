@@ -16,7 +16,7 @@ internal class ChatViewModel : BaseViewModel
 
         Messages = new ObservableCollection<Message>();
 
-        ConnectToFirebase();
+        //ConnectToFirebase();
 
         SendMessage = new Command(async () =>
         {

@@ -7,7 +7,10 @@ internal class LoginViewModel : BaseViewModel
         IsLoading = false;
         LoginCommand = new Command(async () => await OnLogin());
 
-        UserName = "996701555268";
+        Task.Run(async () =>
+        {
+            UserName = await SecureStorage.Default.GetAsync("AccountName");
+        });
         Password = "5252";
     }
 

@@ -150,6 +150,15 @@
                         </TapGestureRecognizer>
                     </Border.GestureRecognizers>
                 </Border>
+
+                <Label
+                    Text="Версия 1.0.0"
+                    Margin="0, 20, 0, 0"
+                    HorizontalOptions="Center"
+                    FontFamily="RegularFont"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="{x:StaticResource White60}"/>
             </StackLayout>
         </ScrollView>
     </RefreshView>

@@ -1,4 +1,7 @@
-﻿namespace MedLinkDoctorApp.ViewModels;
+﻿
+using System.Windows.Input;
+
+namespace MedLinkDoctorApp.ViewModels;
 
 internal class OnlineViewModel : BaseViewModel
 {
@@ -19,16 +22,22 @@ internal class OnlineViewModel : BaseViewModel
 
         CancelCommand = new Command(OnCancel);
         RejectCommand = new Command(OnReject);
-        AcceptCommand = new Command(OnAccept);
+        AcceptCommand = new AsyncRelayCommand(OnAccept);
     }
 
     string _senderName;
     string _receiverName;
     double _productPrice;
     string _accessToken;
-    int _offerId;
     CancellationTokenSource cancelTokenSource;
     CancellationToken cancelToken;
+
+
+
+    public Command CancelCommand { get; }
+    public ICommand AcceptCommand { get; }
+    public Command RejectCommand { get; }
+
 
     private bool _isConfirmMessage;
     public bool IsConfirmMessage
@@ -48,11 +57,15 @@ internal class OnlineViewModel : BaseViewModel
         get => _isOnline;
         set => SetProperty(ref _isOnline, value);
     }
+    private int _offerId;
+    public int OfferId
+    {
+        get => _offerId;
+        set => SetProperty(ref _offerId, value);
+    }
 
 
-    public Command CancelCommand { get; }
-    public Command AcceptCommand { get; }
-    public Command RejectCommand { get; }
+    
 
     void GetOffer()
     {
@@ -75,7 +88,7 @@ internal class OnlineViewModel : BaseViewModel
                         await SecureStorage.Default.SetAsync("ReceiverName", offer.SenderName);
                         _productPrice = offer.ProductPrice;
                         ConfirmMessage = $"К вам поступил запрос на консультацию, стоимостью {_productPrice} сом.";
-                        _offerId = offer.OfferId;
+                        OfferId = offer.OfferId;
                         IsConfirmMessage = true;
 
                         break;
@@ -105,13 +118,8 @@ internal class OnlineViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Отмена", "Вы отменили запрос", "Ок");
             IsConfirmMessage = false;
             await Task.Delay(1500);
-            while (true)
-            {
-                var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&isConfirmed=1");
-                var isDeleted = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/DeleteOffer?offerId={_offerId}");
-                if (isSaved && isDeleted)
-                    break;
-            }
+            
+            await DeleteOffer(OfferId);
             GetOffer();
         }
         catch (Exception ex)
@@ -119,7 +127,7 @@ internal class OnlineViewModel : BaseViewModel
 
         }
     }
-    async void OnAccept()
+    async Task OnAccept()
     {
         try
         {
@@ -127,10 +135,10 @@ internal class OnlineViewModel : BaseViewModel
             {
                 while (true)
                 {
-                    var isSaved = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/SetOffer?senderName={_senderName}&receiverName={_receiverName}&status=1");
-                    var isDeleted = await ContentService.Instance(_accessToken).ServiceQuery($"api/Offers/DeleteOffer?offerId={_offerId}");
+                    var isSaved = await SaveOffer(1);
+                    await DeleteOffer(OfferId);
 
-                    if (isSaved && isDeleted)
+                    if (isSaved)
                         break;
 
                     await Task.Delay(3000);
@@ -144,5 +152,34 @@ internal class OnlineViewModel : BaseViewModel
         {
 
         }
+    }
+
+    private async Task<bool> SaveOffer(byte isConfirmed)
+    {
+        try
+        {
+            var offer = new Offer
+            {
+                SenderName = _senderName,
+                ReceiverName = _receiverName,
+                ProductPrice = _productPrice,
+                IsConfirmed = isConfirmed
+            };
+            OfferId = await ContentService.Instance(_accessToken).PostItemAsync(offer, "api/Offers/SetOffer");
+
+            if (OfferId > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch { return false; }
+    }
+
+    async Task DeleteOffer(int? offerId)
+    {
+        if (offerId != null && offerId > 0)
+            await ContentService.Instance(_accessToken).DeleteItemAsync($"api/Offers/DeleteOffer?offerId={offerId}");
     }
 }

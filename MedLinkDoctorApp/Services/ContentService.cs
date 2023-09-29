@@ -103,4 +103,92 @@ internal class ContentService
             }
         }
     }
+
+    public async Task<IEnumerable<TResponse>> GetItemsAsync<TResponse>(string requestUrl)
+    {
+        using (HttpClient httpClient = new HttpClient())
+        {
+            httpClient.BaseAddress = new Uri(MedLinkConstants.SERVER_ROOT_URL);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+            try
+            {
+                var response = await httpClient.GetStringAsync(httpClient.BaseAddress + requestUrl);
+                IEnumerable<TResponse> result = JsonConvert.DeserializeObject<IEnumerable<TResponse>>(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+    }
+
+    internal async Task<int> PutItemAsync<TRequest>(TRequest request, string url)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            httpClient.BaseAddress = new Uri(MedLinkConstants.SERVER_ROOT_URL);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await httpClient.PutAsync(url, content);
+                var jsonResult = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<int>(jsonResult);
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+    }
+
+    internal async Task<int> PostItemAsync<TReqeust>(TReqeust request, string url)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            httpClient.BaseAddress = new Uri(MedLinkConstants.SERVER_ROOT_URL);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            //httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
+
+            try
+            {
+                var response = await httpClient.PostAsync(url, content);
+                var jsonResult = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<int>(jsonResult);
+                return result;
+            }
+            catch { return 0; }
+        }
+    }
+
+    internal async Task<int> DeleteItemAsync(string url)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            httpClient.BaseAddress = new Uri(MedLinkConstants.SERVER_ROOT_URL);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+            try
+            {
+                var response = await httpClient.DeleteAsync(url);
+                var jsonResult = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<int>(jsonResult);
+                return result;
+            }
+            catch { return 0; }
+        }
+    }
 }

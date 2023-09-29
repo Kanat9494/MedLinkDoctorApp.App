@@ -17,6 +17,10 @@ global using Firebase.Database;
 global using System.Collections.ObjectModel;
 global using Firebase.Database.Query;
 global using System.Reactive.Linq;
+global using CommunityToolkit.Maui.Markup;
+global using CommunityToolkit.Mvvm.Input;
+
+
 
 
 
