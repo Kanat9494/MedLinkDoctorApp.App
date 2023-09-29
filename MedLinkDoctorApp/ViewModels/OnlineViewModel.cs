@@ -136,7 +136,6 @@ internal class OnlineViewModel : BaseViewModel
                 while (true)
                 {
                     var isSaved = await SaveOffer(1);
-                    await DeleteOffer(OfferId);
 
                     if (isSaved)
                         break;
@@ -145,6 +144,7 @@ internal class OnlineViewModel : BaseViewModel
                 }
             });
             
+            await DeleteOffer(OfferId);
 
             await Shell.Current.GoToAsync(nameof(ChatPage));
         }
@@ -165,9 +165,9 @@ internal class OnlineViewModel : BaseViewModel
                 ProductPrice = _productPrice,
                 IsConfirmed = isConfirmed
             };
-            OfferId = await ContentService.Instance(_accessToken).PostItemAsync(offer, "api/Offers/SetOffer");
+            var offerId = await ContentService.Instance(_accessToken).PostItemAsync(offer, "api/Offers/SetOffer");
 
-            if (OfferId > 0)
+            if (offerId > 0)
             {
                 return true;
             }
