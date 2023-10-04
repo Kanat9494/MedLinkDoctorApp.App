@@ -12,7 +12,7 @@ public class MedLinkConstants
     //internal const string SERVER_ROOT_URL = "http://192.168.1.51:45455";
 
     internal const string CONFIRM_MESSAGE = "Kana-LetoCoOwner";
-    internal const string PHOTO_MESSAGE = "Photo-Message";
+    internal const string PHOTO_MESSAGE = "0kPOMl823POm120984m";
     internal const string REJECT_MESSAGE = "RejectingTheMessage!";
 
     //для работы

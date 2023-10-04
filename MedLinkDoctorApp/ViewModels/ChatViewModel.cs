@@ -4,24 +4,29 @@ internal class ChatViewModel : BaseViewModel
 {
     public ChatViewModel()
     {
+        _cancelTokenSource = new CancellationTokenSource();
+        _cancelToken = _cancelTokenSource.Token;
+        _abortMessage = "Вы вышли из чата";
+
         Task.Run(async () =>
         {
-            accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
+            _accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
 
             _senderName = await SecureStorage.Default.GetAsync("AccountName");
             _receiverName = await SecureStorage.Default.GetAsync("ReceiverName");
+
+            await ConnectToChat();
         }).Wait();
 
         Messages = new ObservableCollection<Message>();
 
-        ConnectToFirebase();
 
         SendMessage = new AsyncRelayCommand(OnSendMessage);
 
-        OpenAudioMessagePage = new Command(ToAudioMessagePage);
-        OpenPhotoMessagePage = new Command(PickImage);
+        OpenAudioMessagePage = new AsyncRelayCommand(ToAudioMessagePage);
+        OpenPhotoMessagePage = new AsyncRelayCommand(PickImage);
         OpenPhotoMessageCommand = new Command<string>(async (imageUrl) => await OnOpenPhotoMessage(imageUrl));
-        AbortChatCommand = new Command(OnAbortChat);
+        AbortChatCommand = new AsyncRelayCommand(OnAbortChat);
     }
 
     string _accessToken;
@@ -154,21 +159,20 @@ internal class ChatViewModel : BaseViewModel
 
     private async Task OnAbortChat()
     {
-        await Shell.Current.DisplayAlert("Отмена", "Консультация отменена!", "Ок");
-        SendingMessage = "Врач завершил консультацию, теперь вы также можете покинуть чат!";
+        await Shell.Current.DisplayAlert("Отмена", _abortMessage, "Ок");
+        SendingMessage = "Пациент завершил консультацию, теперь вы также можете покинуть чат!";
         await OnSendMessage();
+        DisconnectFromChat();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
 
     private async Task OnOpenPhotoMessage(string imageUrl)
-    {
-        //await Shell.Current.GoToAsync($"{nameof(ImageBrowsePage)}?{nameof(ImageBrowseViewModel.ImageUrl)}={imageUrl}");
-    }
+        => await Shell.Current.GoToAsync($"{nameof(ImageBrowsePage)}?{nameof(ImageBrowseViewModel.ImageUrl)}={imageUrl}");
 
 
     #region SendImage
 
-    async void PickImage()
+    async Task PickImage()
     {
         var result = await FilePicker.PickAsync(new PickOptions
         {
@@ -181,16 +185,17 @@ internal class ChatViewModel : BaseViewModel
 
         var stream = await result.OpenReadAsync();
 
+        var imagePath = result.FullPath;
         var imageBytes = FileHelper.StreamTyByte(stream);
-        string accessToken = await SecureStorage.Default.GetAsync("UserAccessToken");
+        string accessToken = await SecureStorage.Default.GetAsync("DoctorAccessToken");
 
-        var imageUrl = MedLinkConstants.FILE_BASE_PATH + "/" + await FileService.UploadFile(imageBytes, accessToken);
+        //var imageUrl = MedLinkConstants.FILE_BASE_PATH + "/" + await FileService.UploadFile(imageBytes, accessToken);
 
         //await OnSendMessage("test", "tomy", "тестовый месседж", $"{MedLinkConstants.FILE_BASE_PATH}/{filePath}");
-        await SendImageMessage(imageUrl);
+        await SendImageMessage(imagePath, imageBytes);
     }
 
-    async Task SendImageMessage(string imageUrl)
+    async Task SendImageMessage(string imagePath, byte[] imageData)
     {
         try
         {
@@ -198,11 +203,12 @@ internal class ChatViewModel : BaseViewModel
             {
                 SenderName = _senderName,
                 ReceiverName = _receiverName,
-                Content = "Фото",
-                ImageUrl = imageUrl
+                Content = MedLinkConstants.PHOTO_MESSAGE,
+                ImageData = imageData,
+                ImageUrl = imagePath
             };
-            var serializedMessage = JsonConvert.SerializeObject(message);
-            await firebaseClient.Child("Messages").PostAsync(serializedMessage);
+
+            await ContentService.Instance(_accessToken).PostItemAsync(message, "api/Messages/SendMessage");
 
             //это лишнее убрал, чтобы не отправлять сообщение 2 раза
             SendLocalMessage(message);
