@@ -73,7 +73,6 @@
                             FontFamily="RegularFont"/>
                         <Image
                         Source="{Binding ImageUrl}"
-                            WidthRequest="200"
                             >
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer
