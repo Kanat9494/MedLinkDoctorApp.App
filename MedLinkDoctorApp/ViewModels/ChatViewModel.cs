@@ -129,6 +129,13 @@ internal class ChatViewModel : BaseViewModel
             message.Content = "";
             Messages.Add(message);
             SendingMessage = string.Empty;
+            if (message.ImageData != null)
+            {
+                Task.Run(async () =>
+                {
+                    message.ImageUrl = await FileHelper.SaveFileAsync(message.ImageData);
+                });
+            }
             return;
         }
 
@@ -160,7 +167,7 @@ internal class ChatViewModel : BaseViewModel
     private async Task OnAbortChat()
     {
         await Shell.Current.DisplayAlert("Отмена", _abortMessage, "Ок");
-        SendingMessage = "Пациент завершил консультацию, теперь вы также можете покинуть чат!";
+        SendingMessage = "Врач завершил консультацию, теперь вы также можете покинуть чат!";
         await OnSendMessage();
         DisconnectFromChat();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
